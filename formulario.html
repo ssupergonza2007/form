@@ -1,0 +1,605 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Una pregunta importante 💗</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+
+      background:
+        radial-gradient(circle at 20% 20%, #ffd6e7 0%, transparent 25%),
+        radial-gradient(circle at 80% 80%, #ffb6d5 0%, transparent 30%),
+        linear-gradient(135deg, #fff0f6, #ffc1dc, #ff8fbd);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      color: #8f164d;
+    }
+
+    /* CORAZONES FLOTANDO */
+
+    .heart {
+      position: fixed;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 25px;
+      animation: float 7s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(110vh) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-15vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* TARJETA */
+
+    .card {
+      position: relative;
+
+      width: min(90%, 600px);
+
+      padding: 50px 30px;
+
+      text-align: center;
+
+      background: rgba(255, 255, 255, 0.90);
+
+      border: 4px solid #ff8fbd;
+
+      border-radius: 35px;
+
+      box-shadow:
+        0 20px 50px rgba(190, 35, 100, 0.25),
+        inset 0 0 30px rgba(255, 105, 170, 0.12);
+
+      backdrop-filter: blur(8px);
+
+      z-index: 10;
+    }
+
+    /* CORAZÓN PRINCIPAL */
+
+    .emoji {
+      font-size: 70px;
+
+      animation: heartbeat 1.3s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+    }
+
+    /* PREGUNTA */
+
+    h1 {
+      margin: 15px 0 10px;
+
+      font-size: clamp(35px, 8vw, 60px);
+
+      color: #e72c7e;
+
+      text-shadow: 2px 2px #ffd1e4;
+    }
+
+    .subtitle {
+      font-size: 20px;
+
+      color: #a52861;
+
+      margin-bottom: 35px;
+    }
+
+    /* BOTONES */
+
+    .buttons {
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 25px;
+
+      min-height: 70px;
+
+      position: relative;
+    }
+
+    button {
+      border: none;
+
+      padding: 16px 35px;
+
+      border-radius: 50px;
+
+      font-size: 20px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    }
+
+    /* BOTÓN SÍ */
+
+    #yes {
+      background:
+        linear-gradient(
+          135deg,
+          #ff4f9a,
+          #e91e72
+        );
+
+      color: white;
+
+      box-shadow:
+        0 8px 20px rgba(233, 30, 114, 0.35);
+    }
+
+    #yes:hover {
+      transform: scale(1.08);
+
+      box-shadow:
+        0 12px 28px rgba(233, 30, 114, 0.5);
+    }
+
+    /* BOTÓN NO */
+
+    #no {
+      background: #ffd1e4;
+
+      color: #a51e5b;
+
+      box-shadow:
+        0 5px 15px rgba(180, 30, 90, 0.15);
+
+      /* IMPORTANTE:
+         Empieza siendo NORMAL, junto al botón SÍ */
+      position: relative;
+    }
+
+    /* Cuando empieza a escapar,
+       JavaScript lo convierte en fixed */
+
+    /* MENSAJE FINAL */
+
+    .success {
+      display: none;
+
+      animation: appear 0.8s ease forwards;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+
+        transform: scale(0.6);
+      }
+
+      to {
+        opacity: 1;
+
+        transform: scale(1);
+      }
+    }
+
+    .success h2 {
+      font-size: clamp(35px, 7vw, 55px);
+
+      color: #e91e72;
+
+      margin: 10px 0;
+    }
+
+    .success p {
+      font-size: 25px;
+
+      color: #9c1958;
+
+      line-height: 1.5;
+    }
+
+    .ring {
+      font-size: 70px;
+
+      margin-top: 10px;
+    }
+
+    .small {
+      margin-top: 25px;
+
+      color: #d34b86;
+
+      font-size: 14px;
+    }
+
+    /* CONFETI */
+
+    .confetti {
+      position: fixed;
+
+      top: -20px;
+
+      font-size: 25px;
+
+      pointer-events: none;
+
+      animation:
+        confettiFall 4s linear forwards;
+
+      z-index: 200;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform:
+          translateY(110vh)
+          rotate(720deg);
+
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- CORAZONES -->
+
+  <div class="heart" style="left: 5%; animation-delay: 0s;">💗</div>
+
+  <div class="heart" style="left: 15%; animation-delay: 2s;">💕</div>
+
+  <div class="heart" style="left: 30%; animation-delay: 4s;">💖</div>
+
+  <div class="heart" style="left: 50%; animation-delay: 1s;">💘</div>
+
+  <div class="heart" style="left: 70%; animation-delay: 3s;">💗</div>
+
+  <div class="heart" style="left: 85%; animation-delay: 5s;">💕</div>
+
+  <div class="heart" style="left: 95%; animation-delay: 1.5s;">💖</div>
+
+
+  <!-- TARJETA -->
+
+  <main class="card">
+
+    <!-- PREGUNTA -->
+
+    <div id="question">
+
+      <div class="emoji">
+        💗
+      </div>
+
+      <h1>
+        ¿Me quieres?
+      </h1>
+
+      <p class="subtitle">
+        Tengo una pregunta muy importante para ti... 🥺💕
+      </p>
+
+
+      <!-- LOS DOS BOTONES EMPIEZAN JUNTOS -->
+
+      <div class="buttons">
+
+        <button id="yes">
+          SÍ 💖
+        </button>
+
+        <button id="no">
+          NO 🙄
+        </button>
+
+      </div>
+
+
+      <p class="small">
+        Piénsalo bien... solo hay una respuesta correcta 👀💕
+      </p>
+
+    </div>
+
+
+    <!-- MENSAJE CUANDO PULSA SÍ -->
+
+    <div id="success" class="success">
+
+      <div class="ring">
+        💍
+      </div>
+
+      <h2>
+        ¡ENHORABUENA! 💕
+      </h2>
+
+      <p>
+        Mañana nos casamos
+        <br>
+        🥰💍💒💗
+      </p>
+
+      <div style="font-size: 45px;">
+        💐 👰🏻‍♀️ 🤵🏻‍♂️ 💐
+      </div>
+
+      <p style="font-size: 18px;">
+        Sabía que elegirías correctamente 😌❤️
+      </p>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    const noButton =
+      document.getElementById("no");
+
+    const yesButton =
+      document.getElementById("yes");
+
+    const question =
+      document.getElementById("question");
+
+    const success =
+      document.getElementById("success");
+
+
+    /*
+      FUNCIÓN PARA MOVER EL BOTÓN NO
+
+      La primera vez que se intenta pulsar,
+      pasa de estar junto al SÍ a convertirse
+      en un botón que puede aparecer por
+      cualquier parte de la pantalla.
+    */
+
+    function moveNoButton() {
+
+      /*
+        Convertimos el botón en "fixed".
+
+        Esto hace que deje de estar dentro
+        de la tarjeta y pueda moverse por
+        TODA la pantalla.
+      */
+
+      noButton.style.position = "fixed";
+
+
+      /*
+        Evitamos que aparezca parcialmente
+        fuera de la pantalla.
+      */
+
+      const margin = 20;
+
+      const maxX =
+        window.innerWidth -
+        noButton.offsetWidth -
+        margin;
+
+      const maxY =
+        window.innerHeight -
+        noButton.offsetHeight -
+        margin;
+
+
+      /*
+        Posición aleatoria.
+      */
+
+      const randomX =
+        Math.floor(
+          Math.random() * (maxX - margin)
+        ) + margin;
+
+      const randomY =
+        Math.floor(
+          Math.random() * (maxY - margin)
+        ) + margin;
+
+
+      noButton.style.left =
+        randomX + "px";
+
+      noButton.style.top =
+        randomY + "px";
+    }
+
+
+    /*
+      ORDENADOR
+
+      Cuando el ratón entra en el botón,
+      el botón ESCAPA.
+    */
+
+    noButton.addEventListener(
+      "mouseenter",
+      moveNoButton
+    );
+
+
+    /*
+      MÓVIL
+
+      Cuando intenta tocar el botón,
+      también escapa.
+    */
+
+    noButton.addEventListener(
+      "touchstart",
+      function(event) {
+
+        event.preventDefault();
+
+        moveNoButton();
+
+      }
+    );
+
+
+    /*
+      Si de alguna manera consigue hacer
+      clic en el NO...
+    */
+
+    noButton.addEventListener(
+      "click",
+      function(event) {
+
+        event.preventDefault();
+
+        moveNoButton();
+
+      }
+    );
+
+
+    /*
+      BOTÓN SÍ
+
+      Al pulsarlo desaparece la pregunta
+      y aparece el mensaje romántico.
+    */
+
+    yesButton.addEventListener(
+      "click",
+      function() {
+
+        question.style.display = "none";
+
+        success.style.display = "block";
+
+
+        /*
+          CONFETI DE CORAZONES
+        */
+
+        for (let i = 0; i < 60; i++) {
+
+          const confetti =
+            document.createElement("div");
+
+          confetti.className =
+            "confetti";
+
+
+          const emojis = [
+            "💗",
+            "💕",
+            "💖",
+            "💘",
+            "💍",
+            "🌸",
+            "✨"
+          ];
+
+
+          confetti.innerText =
+            emojis[
+              Math.floor(
+                Math.random() *
+                emojis.length
+              )
+            ];
+
+
+          confetti.style.left =
+            Math.random() * 100 + "vw";
+
+
+          confetti.style.animationDelay =
+            Math.random() * 2 + "s";
+
+
+          confetti.style.fontSize =
+            (15 + Math.random() * 25) + "px";
+
+
+          document.body.appendChild(
+            confetti
+          );
+
+
+          setTimeout(
+            () => confetti.remove(),
+            6000
+          );
+
+        }
+
+      }
+    );
+
+
+    /*
+      Si cambia el tamaño de la pantalla
+      mientras el NO está escapando,
+      lo recolocamos.
+    */
+
+    window.addEventListener(
+      "resize",
+      function() {
+
+        if (
+          noButton.style.position === "fixed"
+        ) {
+
+          moveNoButton();
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
+```
